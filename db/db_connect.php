@@ -3,17 +3,14 @@
 class DbConnect {
     private $conn = null;
 
-    function __construct($conn_info) {
-        if ($conn_info['conn_type'] == 'test') {
-            $this->test_db_connect();
-            return true;
-        } else {
-            return false;
-        }
+    function __construct() {
+        $this->db_connect('localhost', 'root', 'root');
     }
 
-    function test_db_connect() {
-        $this->db_connect('localhost', 'root', 'root');
+    function build_db($conn_info) {
+        if($conn_info['db_name'] == 'test_db') {
+            new BuildTestDb($this);
+        }
     }
 
     function db_connect($host, $user, $password) {
@@ -22,7 +19,7 @@ class DbConnect {
             $error_message = "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
             throw new Exception($error_message);
         }
-        say($mysqli->host_info);
+        say('CONNECT DB: ' . $mysqli->host_info);
         $this->conn = $mysqli;
     }
 
@@ -33,7 +30,7 @@ class DbConnect {
         say('QUERY RETURN VALUE: ' . $result_string);
     }
 
-    function does_db_exist($db_name) {
+    function db_exists($db_name) {
         return in_array($db_name, $this->get_db_names());
     }
 
