@@ -19,15 +19,15 @@ class DbConnect {
             $error_message = "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
             throw new Exception($error_message);
         }
-        say('CONNECT DB: ' . $mysqli->host_info);
+        say(bold(grey('CONNECT DB: ')) . $mysqli->host_info);
         $this->conn = $mysqli;
     }
 
     function db_query($sql) {
-        say('EXECUTE QUERY: ' . $sql);
         $result = $this->conn->query($sql);
-        $result_string = $result ? 'SUCCESS' : 'FAILURE';
-        say('QUERY RETURN VALUE: ' . $result_string);
+        $result_string = $result ? green('QUERY SUCCESS') : red('QUERY FAILURE');
+        say(bold($result_string) . ': "' . $sql . '"');
+        return $result;
     }
 
     function db_exists($db_name) {
