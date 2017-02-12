@@ -27,6 +27,9 @@ class DbConnect {
         $result = $this->conn->query($sql);
         $result_string = $result ? green('QUERY SUCCESS') : red('QUERY FAILURE');
         say(bold($result_string) . ': "' . $sql . '"');
+        if(!$result) {
+            say(bold(red('ERROR: ')) . $this->conn->error);
+        }
         return $result;
     }
 
